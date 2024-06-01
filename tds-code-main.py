@@ -3,7 +3,7 @@ import picar
 import cv2
 import datetime
 from tds-code-lane_follower import HandCodedLaneFollower
-from objects_on_road_processor import ObjectsOnRoadProcessor
+#from objects_on_road_processor import ObjectsOnRoadProcessor
 
 _SHOW_IMAGE = True
 
@@ -27,11 +27,11 @@ class DeepPiCar(object):
 
         self.pan_servo = picar.Servo.Servo(1)
         self.pan_servo.offset = -30  # calibrate servo to center
-        self.pan_servo.write(90)
+        self.pan_servo.write(110)
 
         self.tilt_servo = picar.Servo.Servo(2)
         self.tilt_servo.offset = 20  # calibrate servo to center
-        self.tilt_servo.write(90)
+        self.tilt_servo.write(80)
 
         logging.debug('Set up back wheels')
         self.back_wheels = picar.back_wheels.Back_Wheels()
@@ -88,6 +88,7 @@ class DeepPiCar(object):
         """
 
         logging.info('Starting to drive at speed %s...' % speed)
+        self.back_wheels.forward()
         self.back_wheels.speed = speed
         i = 0
         while self.camera.isOpened():
