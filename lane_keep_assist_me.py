@@ -71,14 +71,22 @@ def rescaling(image, scale = 0.5):
 def detect_edges(image):
     greyscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     #show_image("greyscale image", greyscale)
-    lower_blue = np.array([30, 40, 0])             
-    upper_blue = np.array([150, 255, 255])
-    #mask = cv2.inRange(hsv, lower_blue, upper_blue)
-    #show_image("blue mask", mask)
-    edges = cv2.Canny(greyscale, 150, 250)  
-    #show_image("canny", edges)         
+    edges = cv2.Canny(greyscale, 150, 250) 
 
-    return edges
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    show_image('hsv', hsv)
+    lower_red1 = np.array([0, 70, 50])             
+    upper_red1 = np.array([10, 255, 255])
+    lower_red2 = np.array([160, 70, 50])          
+    upper_red2 = np.array([180, 255, 255])
+    hsv_mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
+    hsv_mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+    hsv_mask = hsv_mask1 | hsv_mask2
+    show_image("red mask", hsv_mask)
+    edges_hsv = cv2.Canny(hsv_mask, 200, 400)
+    show_image("canny", edges_hsv)         
+
+    return edges_hsv
 
 def region_of_interest(image):
     height = image.shape[0]
